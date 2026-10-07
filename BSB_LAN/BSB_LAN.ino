@@ -421,7 +421,7 @@ int8_t max_valve[MAX_CUL_DEVICES] = { -1 };
 uint64_t minimum_SD_size = 0;
     #include "FS.h"
     #include <LittleFS.h>
-  #if (!defined(FORCE_SD_MMC_ON_NODEMCU) || !defined(SOC_SDMMC_HOST_SUPPORTED))    // Joy-It NodeMCU with SPI-based SD card reader or board without SD_MMC support
+  #if (!defined(FORCE_SD_MMC_ON_NODEMCU) && !defined(SOC_SDMMC_HOST_SUPPORTED))    // Joy-It NodeMCU with SPI-based SD card reader or board without SD_MMC support
     #include "SD.h"
     #include "SPI.h"
 FS& SDCard = SD;
@@ -4485,7 +4485,7 @@ bool createdatalogFileAndWriteHeader() {
 #ifdef ESP32
 uint64_t usedBytes() {
   if (LogDestination == SDCARD) {
-  #if (!defined(FORCE_SD_MMC_ON_NODEMCU) || !defined(SOC_SDMMC_HOST_SUPPORTED))   // NodeMCU or board without SD_MMC support
+  #if (!defined(FORCE_SD_MMC_ON_NODEMCU) && !defined(SOC_SDMMC_HOST_SUPPORTED))   // NodeMCU or board without SD_MMC support
     return SD.usedBytes();
   #else                           // Olimex or NodeMCU with SD_MMC
     return SD_MMC.usedBytes();
@@ -4497,7 +4497,7 @@ uint64_t usedBytes() {
 
 uint64_t totalBytes() {
   if (LogDestination == SDCARD) {
-  #if (!defined(FORCE_SD_MMC_ON_NODEMCU) || !defined(SOC_SDMMC_HOST_SUPPORTED))   // NodeMCU or board without SD_MMC support
+  #if (!defined(FORCE_SD_MMC_ON_NODEMCU) && !defined(SOC_SDMMC_HOST_SUPPORTED))   // NodeMCU or board without SD_MMC support
     return SD.totalBytes();
   #else                           // Olimex or NodeMCU with SD_MMC
     return SD_MMC.totalBytes();
@@ -7620,7 +7620,7 @@ void startLoggingDevice() {
   }
   #else
   if (LogDestination == SDCARD) {
-    #if (!defined(FORCE_SD_MMC_ON_NODEMCU) || !defined(SOC_SDMMC_HOST_SUPPORTED))   // NodeMCU or board without SD_MMC support
+    #if (!defined(FORCE_SD_MMC_ON_NODEMCU) && !defined(SOC_SDMMC_HOST_SUPPORTED))   // NodeMCU or board without SD_MMC support
     SPI.begin(SD_SCK, SD_MISO, SD_MOSI);
     SD.end();
     if(!SD.begin(SD_CS)){
@@ -7641,7 +7641,7 @@ void startLoggingDevice() {
   #endif
   #ifdef ESP32
   if (LogDestination == SDCARD) {
-    #if (!defined(FORCE_SD_MMC_ON_NODEMCU) || !defined(SOC_SDMMC_HOST_SUPPORTED))   // NodeMCU
+    #if (!defined(FORCE_SD_MMC_ON_NODEMCU) && !defined(SOC_SDMMC_HOST_SUPPORTED))   // NodeMCU
     SDCard = SD;
     #else
     SDCard = SD_MMC;
